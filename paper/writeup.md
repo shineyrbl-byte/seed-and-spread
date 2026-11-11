@@ -94,7 +94,7 @@ The dev ordering holds on test. seed+bm25 beats BM25 by +0.034 MRR (p = 0.015) a
 
 *Figure 1. Fraction of tasks whose gold file appears in the map, by ranker, layout and budget (Gemma 4 tokens).*
 
-<!-- COVERAGE paragraph -->
+Visibility caps what any model can do with a map, and it separates the strategies clearly (Figure 1). With issue-conditioned rankers, a **paths-only** map shows the gold file in 92–93% of tasks at 500 tokens and 98% at 2,000. Signatures cost space: at 2,000 tokens, seed+bm25 signature maps show it in 91% of tasks, and they need 8,000 tokens to reach 97%. Repository-centric maps are far worse. A 2,000-token global-PageRank signature map shows the gold file in only 21% of tasks, and an alphabetical tree in 9%. Even 8,000 tokens of tree paths cover only 74% of these repositories. PPR spreading loses visibility relative to seeds alone at every budget (signatures at 2,000: 0.80 vs 0.87).
 
 ### 4.4 Gemma 4 on device
 

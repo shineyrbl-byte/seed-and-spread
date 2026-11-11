@@ -34,19 +34,19 @@ def coverage():
     if len(rows) < 300:
         print("coverage: gemmatok incomplete", len(rows)); return
     budgets = [500, 1000, 2000, 4000, 8000]
-    fig, axes = plt.subplots(1, 2, figsize=(9, 3.4), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(9, 3.8), sharey=True)
     for ax, layout, title in [(axes[0], "paths", "paths only"), (axes[1], "sigs", "paths + signatures")]:
         for name, (c, m, label) in SERIES.items():
             ys = [sum(r["in_map"][f"{name}/{layout}/{b}"] for r in rows) / len(rows) for b in budgets]
             ax.plot(budgets, ys, color=c, marker=m, lw=2, ms=6, mec=SURF, mew=1.5, label=label)
-            ax.annotate(f"{ys[2]:.2f}", (2000, ys[2]), textcoords="offset points", xytext=(4, 4), fontsize=8, color=INK2) if name in ("seed+bm25", "pagerank", "tree") else None
         ax.set_xscale("log", base=2); ax.set_xticks(budgets, [str(b) for b in budgets])
         ax.set_title(title, color=INK, fontsize=10, loc="left")
         ax.set_xlabel("map budget (Gemma 4 tokens)"); ax.grid(axis="y", color=GRID, lw=0.8); ax.set_ylim(0, 1.02)
     axes[0].set_ylabel("gold file visible in map")
-    axes[1].legend(frameon=False, fontsize=8, loc="lower right", labelcolor=INK2)
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=5, labelcolor=INK2, bbox_to_anchor=(0.5, 0.0))
     fig.suptitle("Is the file that needs fixing even in the map? (SWE-bench Lite test, n=300)", x=0.01, ha="left", color=INK, fontsize=11)
-    fig.tight_layout(); fig.savefig(P / "fig_coverage.png", dpi=200); plt.close(fig)
+    fig.tight_layout(rect=(0, 0.08, 1, 1)); fig.savefig(P / "fig_coverage.png", dpi=200); plt.close(fig)
 
 
 def llm_bars(tag="gemma-4-e2b-it-4bit", fname="fig_llm_e2b.png", title="Gemma 4 E2B"):
