@@ -59,9 +59,15 @@ def main():
     # ---------- rankers on test
     rows = load(R / "rankers.jsonl")
     sf = {r["id"]: r for r in load(R / "rankers_seedfuse.jsonl")}
+    gt = {r["id"]: r for r in load(R / "rankers_gemmatok.jsonl")}
+    budget_unit = "approx. tokens = chars/4"
     for r in rows:
         if r["id"] in sf:
             r["rank"].update(sf[r["id"]]["rank"]); r["in_map"].update(sf[r["id"]]["in_map"])
+    if len(gt) == len(rows) and rows:            # prefer budgets counted with the Gemma tokenizer
+        budget_unit = "Gemma 4 tokens"
+        for r in rows:
+            r["in_map"] = gt[r["id"]]["in_map"]
     if rows:
         w("## Table 1: rankers, SWE-bench Lite test (n=%d), no LLM\n" % len(rows))
         w("| ranker | Acc@1 | Acc@5 | Acc@10 | MRR [95% CI] |\n|---|---|---|---|---|")
@@ -80,7 +86,7 @@ def main():
         for rp in repos:
             sub = [r for r in rows if r["repo"] == rp]
             w(f"| {rp} | {len(sub)} | " + " | ".join(f"{mrr([r['rank'][n] for r in sub]):.2f}" for n in names) + " |")
-        w("\n## Table 2: gold file visible in the map, by budget (approx. tokens = chars/4)\n")
+        w(f"\n## Table 2: gold file visible in the map, by budget ({budget_unit})\n")
         keys = sorted({k.split("/", 1)[1] for k in rows[0]["in_map"]}, key=lambda s: (s.split("/")[0], int(s.split("/")[1])))
         w("| ranker | " + " | ".join(keys) + " |\n|---|" + "---|" * len(keys))
         for n in names:

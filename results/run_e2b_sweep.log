@@ -1,0 +1,18 @@
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 734.68it/s]
+django__django-14608                     seed+bm25/sigs/2000  in= 2236  22.5s rank=1 map=True
+django__django-14608                     seed+bm25/sigs/500   in=  735   5.9s rank=1 map=True
+django__django-14608                     seed+bm25/sigs/1000  in= 1234   4.9s rank=2 map=True
+django__django-14608                     seed+bm25/sigs/4000  in= 4231  10.6s rank=1 map=True
+django__django-14608                     seed+bm25/paths/2000 in= 2226   6.8s rank=1 map=True
+django__django-14608                     bm25/paths/2000      in= 2222   6.6s rank=1 map=True
+sympy__sympy-14396                       seed+bm25/sigs/2000  in= 2784  14.4s rank=1 map=True
+sympy__sympy-14396                       seed+bm25/sigs/500   in= 1285   5.4s rank=1 map=True
+sympy__sympy-14396                       seed+bm25/sigs/1000  in= 1777   8.9s rank=1 map=True
+sympy__sympy-14396                       seed+bm25/sigs/4000  in= 4786  18.4s rank=1 map=True
+sympy__sympy-14396                       seed+bm25/paths/2000 in= 2773  11.8s rank=1 map=True
+sympy__sympy-14396                       bm25/paths/2000      in= 2784   9.2s rank=1 map=True
+matplotlib__matplotlib-26020             seed+bm25/sigs/2000  in= 3965  12.3s rank=1 map=True
+matplotlib__matplotlib-26020             seed+bm25/sigs/500   in= 2464   5.3s rank=1 map=True
+matplotlib__matplotlib-26020             seed+bm25/sigs/1000  in= 2958   8.9s rank=1 map=True
+matplotlib__matplotlib-26020             seed+bm25/sigs/4000  in= 5968  15.0s rank=1 map=True
+matplotlib__matplotlib-26020             seed+bm25/paths/2000 in= 3963  10.9s rank=1 map=True
