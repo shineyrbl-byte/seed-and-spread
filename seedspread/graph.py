@@ -159,8 +159,12 @@ def build_graph(files: dict[str, str], max_bytes: int = 400_000) -> CodeGraph:
             g.parse_failures += 1
             continue
         c = _Collector(g, path)
-        for stmt in tree.body:
-            c.visit(stmt)
+        try:
+            for stmt in tree.body:
+                c.visit(stmt)
+        except RecursionError:              # pathologically nested generated code
+            g.parse_failures += 1
+            c.stack.clear()
         collectors.append(c)
     for c in collectors:
         for module, level, names in c.imports:

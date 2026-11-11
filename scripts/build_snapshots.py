@@ -17,10 +17,10 @@ CACHE = ROOT / "cache"
 
 
 def main():
+    sys.setrecursionlimit(20000)
     tasks = load_tasks()
     out = CACHE / "graphs"
     out.mkdir(parents=True, exist_ok=True)
-    stats = []
     for i, t in enumerate(tasks):
         dst = out / f"{t.instance_id}.pkl"
         if dst.exists():
@@ -34,11 +34,9 @@ def main():
         s = dict(id=t.instance_id, files=len(files), symbols=len(g.symbols),
                  edges=sum(len(v) for v in g.edges.values()), parse_failures=g.parse_failures,
                  gold_in_candidates=all(f in files for f in t.gold_files), secs=round(time.time() - t0, 2))
-        stats.append(s)
-        print(i, json.dumps(s), flush=True)
-    with open(ROOT / "results" / "graph_stats.jsonl", "a") as fh:
-        for s in stats:
+        with open(ROOT / "results" / "graph_stats.jsonl", "a") as fh:
             fh.write(json.dumps(s) + "\n")
+        print(i, json.dumps(s), flush=True)
 
 
 if __name__ == "__main__":
