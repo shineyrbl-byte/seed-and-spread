@@ -27,8 +27,16 @@ def first_gold_rank(ranked, gold):
     return min(ranks) + 1 if ranks else None
 
 
+def gemma_counter():
+    """Count budgets in real Gemma 4 tokens (same tokenizer for E2B and E4B)."""
+    from transformers import AutoTokenizer
+    tok = AutoTokenizer.from_pretrained("mlx-community/gemma-4-e2b-it-4bit")
+    return lambda s: len(tok.encode(s, add_special_tokens=False))
+
+
 def main():
     only = set(sys.argv[1:]) or set(RANKERS)
+    count = gemma_counter()
     tasks = load_tasks()
     out = open(ROOT / "results" / f"rankers{SUFFIX}.jsonl", "w")
     for i, t in enumerate(tasks):
@@ -41,7 +49,7 @@ def main():
             row["rank"][name] = first_gold_rank(ranked, t.gold_files)
             for layout in ("paths", "sigs"):
                 for b in BUDGETS:
-                    shown = {ln for ln in render(g, ranked, b, layout).splitlines() if not ln.startswith(" ")}
+                    shown = {ln for ln in render(g, ranked, b, layout, count=count).splitlines() if not ln.startswith(" ")}
                     row["in_map"][f"{name}/{layout}/{b}"] = any(f in shown for f in t.gold_files)
         out.write(json.dumps(row) + "\n"); out.flush()
         print(i, t.instance_id, row["rank"], flush=True)
