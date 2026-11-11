@@ -93,16 +93,17 @@ def budget_sweep():
     bs = sorted(b for b in by if len(by[b]) >= 50)
     if len(bs) < 3:
         return
-    fig, ax = plt.subplots(figsize=(6, 3.4))
+    fig, ax = plt.subplots(figsize=(6, 3.7))
     a1 = [sum(r["rank"] == 1 for r in by[b]) / len(by[b]) for b in bs]
     a5 = [sum(1 for r in by[b] if r["rank"]) / len(by[b]) for b in bs]
     cov = [sum(1 for r in by[b] if r["gold_in_map"]) / len(by[b]) for b in bs]
     for ys, c, m, lab in [(cov, "#1baf7a", "^", "gold visible in map"), (a5, "#eb6834", "s", "Acc@5"), (a1, "#2a78d6", "o", "Acc@1")]:
         ax.plot(bs, ys, color=c, marker=m, lw=2, ms=6, mec=SURF, mew=1.5)
         ax.annotate(lab, (bs[-1], ys[-1]), textcoords="offset points", xytext=(6, -3), fontsize=8, color=INK2)
-    ax.set_xscale("log", base=2); ax.set_xticks(bs, [str(b) for b in bs]); ax.set_xlim(bs[0] * 0.8, bs[-1] * 2.2)
+    secs = [sum(r["secs"] for r in by[b]) / len(by[b]) for b in bs]
+    ax.set_xscale("log", base=2); ax.set_xticks(bs, [f"{b}\n{s_:.1f} s/task" for b, s_ in zip(bs, secs)]); ax.set_xlim(bs[0] * 0.8, bs[-1] * 2.2)
     ax.set_ylim(0, 1.02); ax.grid(axis="y", color=GRID, lw=0.8)
-    ax.set_xlabel("map budget (Gemma 4 tokens)"); ax.set_ylabel("fraction of tasks")
+    ax.set_xlabel("map budget (Gemma 4 tokens) and mean on-device latency"); ax.set_ylabel("fraction of tasks")
     ax.set_title(f"Gemma 4 E2B, seed+bm25 signature maps (n={len(by[bs[0]])})", loc="left", color=INK, fontsize=11)
     fig.tight_layout(); fig.savefig(P / "fig_budget.png", dpi=200); plt.close(fig)
 

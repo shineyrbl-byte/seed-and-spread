@@ -24,12 +24,12 @@ seed+bm25 vs bm25, MRR: diff +0.034, paired bootstrap p=0.015
 |---|---|---|---|---|---|---|---|---|
 | django/django | 114 | 0.00 | 0.03 | 0.41 | 0.44 | 0.59 | 0.61 | 0.63 |
 | sympy/sympy | 77 | 0.00 | 0.02 | 0.54 | 0.59 | 0.66 | 0.59 | 0.66 |
-| scikit-learn/scikit-learn | 23 | 0.01 | 0.03 | 0.69 | 0.76 | 0.83 | 0.83 | 0.85 |
 | matplotlib/matplotlib | 23 | 0.06 | 0.09 | 0.41 | 0.45 | 0.49 | 0.52 | 0.57 |
+| scikit-learn/scikit-learn | 23 | 0.01 | 0.03 | 0.69 | 0.76 | 0.83 | 0.83 | 0.85 |
 | pytest-dev/pytest | 17 | 0.03 | 0.11 | 0.22 | 0.24 | 0.35 | 0.48 | 0.52 |
 | sphinx-doc/sphinx | 16 | 0.02 | 0.08 | 0.19 | 0.28 | 0.31 | 0.68 | 0.59 |
-| psf/requests | 6 | 0.12 | 0.06 | 0.65 | 0.69 | 0.69 | 0.67 | 0.67 |
 | astropy/astropy | 6 | 0.01 | 0.01 | 0.73 | 0.73 | 0.77 | 0.84 | 0.85 |
+| psf/requests | 6 | 0.12 | 0.06 | 0.65 | 0.69 | 0.69 | 0.67 | 0.67 |
 | pylint-dev/pylint | 6 | 0.02 | 0.02 | 0.14 | 0.22 | 0.31 | 0.53 | 0.52 |
 | pydata/xarray | 5 | 0.02 | 0.29 | 0.49 | 0.52 | 0.40 | 0.43 | 0.57 |
 | mwaskom/seaborn | 4 | 0.05 | 0.32 | 0.52 | 0.52 | 0.52 | 0.54 | 0.53 |
@@ -115,32 +115,40 @@ Mean MRR by alpha (fuse=none): a=0.2: 0.611, a=0.5: 0.611, a=0.8: 0.586
 
 Mean MRR by alpha (fuse=none): a=0.2: 0.462, a=0.5: 0.458, a=0.8: 0.447
 
-## Table 3: gemma-4-e2b-it-4bit file localization (tasks with all conditions: 56)
+## Table 3: gemma-4-e2b-it-4bit file localization (tasks with all conditions: 100)
 
 | condition | n | Acc@1 [95% CI] | Acc@5 | gold in map | Acc@1 given gold in map | ranker top-1 | prompt tokens | sec/task |
 |---|---|---|---|---|---|---|---|---|
-| none/none/0 | 56 | 0.14 [0.05, 0.25] | 0.16 | - | - | - | 658 | 2.5 |
-| bm25/paths/2000 | 56 | 0.55 [0.43, 0.68] | 0.75 | 1.00 | 0.55 | 0.54 | 2291 | 6.2 |
-| bm25/sigs/2000 | 56 | 0.62 [0.50, 0.75] | 0.77 | 0.93 | 0.67 | 0.54 | 2658 | 6.9 |
-| pagerank/sigs/2000 | 56 | 0.27 [0.16, 0.39] | 0.34 | 0.25 | 0.50 | 0.02 | 2659 | 6.3 |
-| ppr/sigs/2000 | 56 | 0.57 [0.45, 0.70] | 0.71 | 0.84 | 0.68 | 0.38 | 2658 | 6.5 |
-| ppr+bm25/sigs/2000 | 56 | 0.59 [0.46, 0.71] | 0.73 | 0.93 | 0.63 | 0.43 | 2659 | 6.7 |
-| seed+bm25/paths/2000 | 56 | 0.59 [0.46, 0.71] | 0.75 | 0.96 | 0.61 | 0.59 | 2292 | 6.2 |
-| seed+bm25/sigs/500 | 56 | 0.66 [0.54, 0.79] | 0.77 | 0.88 | 0.76 | 0.59 | 1181 | 3.9 |
-| seed+bm25/sigs/1000 | 56 | 0.64 [0.52, 0.77] | 0.82 | 0.88 | 0.73 | 0.59 | 1681 | 4.9 |
-| seed+bm25/sigs/2000 | 56 | 0.66 [0.54, 0.79] | 0.79 | 0.91 | 0.73 | 0.59 | 2658 | 7.4 |
-| seed+bm25/sigs/4000 | 56 | 0.66 [0.54, 0.79] | 0.80 | 0.96 | 0.69 | 0.59 | 4521 | 10.6 |
-| tree/paths/2000 | 56 | 0.48 [0.34, 0.61] | 0.62 | 0.73 | 0.51 | 0.00 | 2291 | 5.7 |
-- seed+bm25/sigs/2000 vs none/none/0: Acc@1 diff +0.51 (n=57, paired bootstrap p=0.000)
-- seed+bm25/sigs/2000 vs bm25/paths/2000: Acc@1 diff +0.11 (n=56, paired bootstrap p=0.019)
-- seed+bm25/sigs/2000 vs bm25/sigs/2000: Acc@1 diff +0.04 (n=57, paired bootstrap p=0.221)
-- seed+bm25/sigs/2000 vs pagerank/sigs/2000: Acc@1 diff +0.39 (n=57, paired bootstrap p=0.000)
-- seed+bm25/sigs/2000 vs ppr/sigs/2000: Acc@1 diff +0.09 (n=57, paired bootstrap p=0.033)
-- seed+bm25/sigs/2000 vs ppr+bm25/sigs/2000: Acc@1 diff +0.07 (n=57, paired bootstrap p=0.019)
-- seed+bm25/sigs/2000 vs seed+bm25/paths/2000: Acc@1 diff +0.07 (n=56, paired bootstrap p=0.062)
-- seed+bm25/sigs/2000 vs seed+bm25/sigs/500: Acc@1 diff -0.02 (n=57, paired bootstrap p=0.741)
-- seed+bm25/sigs/2000 vs seed+bm25/sigs/1000: Acc@1 diff +0.02 (n=57, paired bootstrap p=0.409)
-- seed+bm25/sigs/2000 vs seed+bm25/sigs/4000: Acc@1 diff +0.00 (n=56, paired bootstrap p=1.000)
-- seed+bm25/sigs/2000 vs tree/paths/2000: Acc@1 diff +0.18 (n=57, paired bootstrap p=0.000)
+| none/none/0 | 100 | 0.15 [0.08, 0.22] | 0.20 | - | - | - | 566 | 2.3 |
+| bm25/paths/2000 | 100 | 0.54 [0.44, 0.64] | 0.75 | 0.99 | 0.55 | 0.54 | 2370 | 6.3 |
+| bm25/sigs/2000 | 100 | 0.63 [0.54, 0.72] | 0.78 | 0.93 | 0.68 | 0.54 | 2577 | 6.8 |
+| pagerank/sigs/2000 | 100 | 0.25 [0.17, 0.34] | 0.35 | 0.23 | 0.52 | 0.01 | 2577 | 6.0 |
+| ppr/sigs/2000 | 100 | 0.57 [0.47, 0.67] | 0.75 | 0.85 | 0.67 | 0.40 | 2576 | 6.4 |
+| ppr+bm25/sigs/2000 | 100 | 0.63 [0.53, 0.72] | 0.79 | 0.94 | 0.67 | 0.50 | 2577 | 6.5 |
+| seed+bm25/paths/2000 | 100 | 0.56 [0.46, 0.66] | 0.77 | 0.97 | 0.58 | 0.63 | 2370 | 6.3 |
+| seed+bm25/sigs/500 | 100 | 0.67 [0.58, 0.76] | 0.81 | 0.90 | 0.74 | 0.63 | 1090 | 3.8 |
+| seed+bm25/sigs/1000 | 100 | 0.63 [0.54, 0.73] | 0.80 | 0.90 | 0.70 | 0.63 | 1590 | 4.8 |
+| seed+bm25/sigs/2000 | 100 | 0.65 [0.55, 0.74] | 0.81 | 0.93 | 0.70 | 0.63 | 2577 | 7.1 |
+| seed+bm25/sigs/4000 | 100 | 0.64 [0.54, 0.73] | 0.80 | 0.96 | 0.67 | 0.63 | 4500 | 10.6 |
+| tree/paths/2000 | 100 | 0.37 [0.28, 0.47] | 0.49 | 0.47 | 0.51 | 0.00 | 2369 | 5.6 |
+- seed+bm25/sigs/2000 vs none/none/0: Acc@1 diff +0.50 (n=100, paired bootstrap p=0.000)
+- seed+bm25/sigs/2000 vs bm25/paths/2000: Acc@1 diff +0.11 (n=100, paired bootstrap p=0.000)
+- seed+bm25/sigs/2000 vs bm25/sigs/2000: Acc@1 diff +0.02 (n=100, paired bootstrap p=0.272)
+- seed+bm25/sigs/2000 vs pagerank/sigs/2000: Acc@1 diff +0.40 (n=100, paired bootstrap p=0.000)
+- seed+bm25/sigs/2000 vs ppr/sigs/2000: Acc@1 diff +0.08 (n=100, paired bootstrap p=0.029)
+- seed+bm25/sigs/2000 vs ppr+bm25/sigs/2000: Acc@1 diff +0.02 (n=100, paired bootstrap p=0.262)
+- seed+bm25/sigs/2000 vs seed+bm25/paths/2000: Acc@1 diff +0.09 (n=100, paired bootstrap p=0.001)
+- seed+bm25/sigs/2000 vs seed+bm25/sigs/500: Acc@1 diff -0.02 (n=100, paired bootstrap p=0.800)
+- seed+bm25/sigs/2000 vs seed+bm25/sigs/1000: Acc@1 diff +0.02 (n=100, paired bootstrap p=0.317)
+- seed+bm25/sigs/2000 vs seed+bm25/sigs/4000: Acc@1 diff +0.01 (n=100, paired bootstrap p=0.354)
+- seed+bm25/sigs/2000 vs tree/paths/2000: Acc@1 diff +0.28 (n=100, paired bootstrap p=0.000)
 
-responses with no valid path: 105/939
+responses with no valid path: 108/1200
+
+## Table 3: gemma-4-e4b-it-4bit file localization (tasks with all conditions: 1)
+
+| condition | n | Acc@1 [95% CI] | Acc@5 | gold in map | Acc@1 given gold in map | ranker top-1 | prompt tokens | sec/task |
+|---|---|---|---|---|---|---|---|---|
+| none/none/0 | 1 | 0.00 [0.00, 0.00] | 0.00 | - | - | - | 210 | 28.4 |
+
+responses with no valid path: 0/1

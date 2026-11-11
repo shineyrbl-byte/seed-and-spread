@@ -145,6 +145,14 @@ def main():
                     continue
                 d, pv = paired([int(a[i]) for i in common], [int(b[i]) for i in common], lambda x: sum(x) / len(x))
                 w(f"- {base} vs {c}: Acc@1 diff {d:+.2f} (n={len(common)}, paired bootstrap p={pv:.3f})")
+        # untuned hybrid: the model's top-1 first, then the ranker's own order (needs full rankings -> recompute)
+        hyb = R / f"hybrid_{p.stem[4:]}.json"
+        if hyb.exists():
+            h = json.loads(hyb.read_text())
+            w("\nHybrid (model top-1, then ranker order) vs ranker alone vs model alone, same tasks:")
+            for c, v in h.items():
+                w(f"- {c}: Acc@1 model {v['model1']:.2f} / ranker {v['ranker1']:.2f}; "
+                  f"Acc@5 model {v['model5']:.2f} / ranker {v['ranker5']:.2f} / hybrid {v['hybrid5']:.2f} (n={v['n']})")
         unparsable = sum(1 for r in lr if not r["preds"])
         w(f"\nresponses with no valid path: {unparsable}/{len(lr)}")
 

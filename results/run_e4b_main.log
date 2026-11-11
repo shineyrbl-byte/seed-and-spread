@@ -1,0 +1,45 @@
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 990.95it/s]
+django__django-14608                     none/none/0          in=  210  28.4s rank=None map=None
+django__django-14608                     seed+bm25/sigs/2000  in= 2236  36.2s rank=1 map=True
+django__django-14608                     bm25/sigs/2000       in= 2235  17.8s rank=1 map=True
+django__django-14608                     pagerank/sigs/2000   in= 2237  13.5s rank=None map=False
+django__django-14608                     tree/paths/2000      in= 2230  16.6s rank=None map=False
+django__django-14608                     ppr/sigs/2000        in= 2228  44.0s rank=2 map=True
+sympy__sympy-14396                       none/none/0          in=  760   9.3s rank=1 map=None
+sympy__sympy-14396                       seed+bm25/sigs/2000  in= 2784  34.6s rank=1 map=True
+sympy__sympy-14396                       bm25/sigs/2000       in= 2780  24.5s rank=1 map=True
+  warnings.warn('resource_tracker: There appear to be %d '
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 2137.91it/s]
+sympy__sympy-14396                       pagerank/sigs/2000   in= 2786  49.7s rank=1 map=True
+matplotlib__matplotlib-26020             none/none/0          in= 1943  39.4s rank=1 map=None
+matplotlib__matplotlib-26020             seed+bm25/sigs/2000  in= 3965  37.9s rank=2 map=True
+matplotlib__matplotlib-26020             bm25/sigs/2000       in= 3964  25.8s rank=1 map=True
+matplotlib__matplotlib-26020             pagerank/sigs/2000   in= 3968  23.3s rank=1 map=False
+scikit-learn__scikit-learn-13497         none/none/0          in=  149   5.6s rank=None map=None
+scikit-learn__scikit-learn-13497         seed+bm25/sigs/2000  in= 2175  40.1s rank=1 map=True
+scikit-learn__scikit-learn-13497         bm25/sigs/2000       in= 2175  12.5s rank=1 map=True
+scikit-learn__scikit-learn-13497         pagerank/sigs/2000   in= 2173  21.3s rank=None map=False
+pytest-dev__pytest-7490                  none/none/0          in= 1218   9.9s rank=None map=None
+pytest-dev__pytest-7490                  seed+bm25/sigs/2000  in= 3239  21.3s rank=2 map=True
+pytest-dev__pytest-7490                  bm25/sigs/2000       in= 3238  21.3s rank=2 map=True
+pytest-dev__pytest-7490                  pagerank/sigs/2000   in= 3246  21.4s rank=None map=False
+sphinx-doc__sphinx-8713                  none/none/0          in=  590   4.1s rank=None map=None
+sphinx-doc__sphinx-8713                  seed+bm25/sigs/2000  in= 2611  15.4s rank=1 map=True
+sphinx-doc__sphinx-8713                  bm25/sigs/2000       in= 2618  16.0s rank=1 map=True
+sphinx-doc__sphinx-8713                  pagerank/sigs/2000   in= 2609  15.4s rank=None map=False
+astropy__astropy-6938                    none/none/0          in=  211   2.3s rank=1 map=None
+astropy__astropy-6938                    seed+bm25/sigs/2000  in= 2238  13.5s rank=1 map=True
+astropy__astropy-6938                    bm25/sigs/2000       in= 2238  13.7s rank=1 map=True
+astropy__astropy-6938                    pagerank/sigs/2000   in= 2235  13.8s rank=None map=False
+psf__requests-2148                       none/none/0          in=  929   8.2s rank=None map=None
+psf__requests-2148                       seed+bm25/sigs/2000  in= 2956  22.8s rank=3 map=True
+psf__requests-2148                       bm25/sigs/2000       in= 2953  22.2s rank=3 map=True
+psf__requests-2148                       pagerank/sigs/2000   in= 2947  21.4s rank=1 map=True
+pylint-dev__pylint-6506                  none/none/0          in=  680   8.5s rank=2 map=None
+pylint-dev__pylint-6506                  seed+bm25/sigs/2000  in= 2706  26.4s rank=1 map=True
+pylint-dev__pylint-6506                  bm25/sigs/2000       in= 2698  40.1s rank=1 map=True
+pylint-dev__pylint-6506                  pagerank/sigs/2000   in= 2697  20.7s rank=4 map=False
+pydata__xarray-4248                      none/none/0          in=  391   6.3s rank=None map=None
+pydata__xarray-4248                      seed+bm25/sigs/2000  in= 2417  18.4s rank=2 map=True
+pydata__xarray-4248                      bm25/sigs/2000       in= 2412  18.6s rank=2 map=True
+pydata__xarray-4248                      pagerank/sigs/2000   in= 2415  22.1s rank=None map=False

@@ -102,11 +102,35 @@ Visibility caps what any model can do with a map, and it separates the strategie
 
 *Figure 2. Gemma 4 E2B Acc@1 with 2,000-token maps (bars) and the top-1 accuracy of the ranker that built each map, without an LLM (ticks). Same 100 tasks in every condition.*
 
-<!-- LLM TABLE + paragraphs -->
+| map (2,000 tokens) | Acc@1 [95% CI] | Acc@5 | gold in map | Acc@1 if gold in map | ranker's own Acc@1 | prompt tok. | s/task |
+|---|---|---|---|---|---|---|---|
+| none (issue only) | 0.15 [0.08, 0.22] | 0.20 | – | – | – | 566 | 2.3 |
+| global PageRank, sigs | 0.25 [0.17, 0.34] | 0.35 | 0.23 | 0.52 | 0.01 | 2,577 | 6.0 |
+| tree, paths | 0.37 [0.28, 0.47] | 0.49 | 0.47 | 0.51 | 0.00 | 2,369 | 5.6 |
+| ppr, sigs | 0.57 [0.47, 0.67] | 0.75 | 0.85 | 0.67 | 0.40 | 2,576 | 6.4 |
+| bm25, paths | 0.54 [0.44, 0.64] | 0.75 | 0.99 | 0.55 | 0.54 | 2,370 | 6.3 |
+| bm25, sigs | 0.63 [0.54, 0.72] | 0.78 | 0.93 | 0.68 | 0.54 | 2,577 | 6.8 |
+| ppr+bm25, sigs | 0.63 [0.53, 0.72] | 0.79 | 0.94 | 0.67 | 0.50 | 2,577 | 6.5 |
+| seed+bm25, paths | 0.56 [0.46, 0.66] | 0.77 | 0.97 | 0.58 | 0.63 | 2,370 | 6.3 |
+| **seed+bm25, sigs** | **0.65** [0.55, 0.74] | **0.81** | 0.93 | 0.70 | 0.63 | 2,577 | 7.1 |
+
+*Table 2. Gemma 4 E2B (4-bit, 8 GB laptop) on the same 100 tasks per row.*
+
+**Conditioning is most of the effect.** Without a map, Gemma 4 E2B names the right file 15% of the time. It mostly invents plausible paths that do not exist: of the 279 paths it named without a map, only 58 (21%) exist in the repository, and 67 of 100 answers contained no real file at all. Any issue-conditioned map brings it to 0.57–0.65. The global-PageRank map, the same graph ranked by centrality, adds 10 points and is 40 points below seed+bm25 (paired p < 0.001). Its gold file is visible only 23% of the time, and an invisible file cannot be chosen.
+
+**Signatures beat coverage.** Paths-only maps show the gold file *more* often than signature maps (0.97–0.99 vs 0.93). Yet signatures raise Acc@1 by 9 points for both seed+bm25 (p = 0.001) and BM25. Seeing what a file defines matters more to the model than seeing more files.
+
+**The model re-ranks weak maps but not strong ones.** On the same tasks, Gemma's top-1 beats the top-1 of the ranker that built its map: PPR 0.40→0.57 (p = 0.001), ppr+bm25 0.50→0.63 (p = 0.006), BM25 0.54→0.63 (p = 0.04). With seed+bm25 the gain shrinks to 0.63→0.65 (p = 0.41), and the model's five-file list (Acc@5 0.81) is *worse* than the ranker's own top five (0.86). Whatever the map, model accuracy converges to 0.57–0.67, and to 0.67–0.70 when the gold file is visible. Once the map is good, the 2B model's judgment, not its view, is the bottleneck. <!-- HYBRID sentence --> Across ranked maps the differences among bm25, ppr+bm25 and seed+bm25 are within noise at n = 100 (p = 0.26–0.27). The ranker-level gain of seed+bm25 (§4.2, n = 300) is the more reliable comparison.
+
+<!-- E4B paragraph -->
 
 ### 4.5 How many tokens does a small model need?
 
-<!-- BUDGET SWEEP -->
+![Budget sweep](fig_budget.png)
+
+*Figure 3. Gemma 4 E2B with seed+bm25 signature maps from 500 to 4,000 tokens (same 100 tasks).*
+
+Very few. Acc@1 is flat across an 8× range of budgets: 0.67, 0.63, 0.65 and 0.64 at 500, 1,000, 2,000 and 4,000 tokens (500 vs 2,000: p = 0.80). Visibility rises from 0.90 to 0.96, but the extra files are rarely the ones the model needed. Latency, however, nearly triples, from 3.8 s to 10.6 s per task, because prefill dominates on a laptop. For an on-device agent the recommendation is concrete: **a 500-token, issue-seeded signature map gets all of the accuracy at a third of the cost.**
 
 ## 5. Discussion
 
