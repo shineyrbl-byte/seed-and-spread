@@ -86,7 +86,7 @@ On dev (n = 223 with a non-test gold file), the best of the 24 propagation varia
 
 The dev ordering holds on test. seed+bm25 beats BM25 by +0.034 MRR (p = 0.015) and +4.0 points Acc@1 (p = 0.06). It ties or wins in 9 of 12 repositories (largest gains: sympy 0.59→0.66 and matplotlib 0.52→0.57). It loses on sphinx (0.68→0.59), where issues describe behavior rather than naming code. Global PageRank places the gold file first in only 2% of tasks: centrality says what is important to the repository, not to the issue.
 
-<!-- HUB BIAS paragraph -->
+**Why spreading hurts: centrality bias.** We rank every file by global PageRank and look at the centrality percentile of each ranker's *wrong* top-1 picks. Gold files are moderately central (median 79th percentile). BM25's mistakes look the same (79th; 12% fall in the 5% most central files). Graph-derived rankers err toward hubs: seed mistakes sit at the 90th percentile (26% in the top 5%), and spreading pushes this further, to the 91st (30%). Popular names are defined in, and referenced from, core modules, so every hop of the walk drifts toward them. BM25 is indifferent to centrality and corrects this bias when fused, which explains why seed+bm25 beats both of its parts.
 
 ### 4.3 Visibility under a budget
 

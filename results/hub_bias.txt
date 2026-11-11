@@ -1,0 +1,4 @@
+gold file centrality percentile: median 0.794
+ppr: median centrality of top-1 0.889; of WRONG top-1 0.911 (n=207); wrong top-1 in top-5% most central: 0.30
+seed: median centrality of top-1 0.874; of WRONG top-1 0.902 (n=193); wrong top-1 in top-5% most central: 0.26
+bm25: median centrality of top-1 0.771; of WRONG top-1 0.787 (n=154); wrong top-1 in top-5% most central: 0.12
