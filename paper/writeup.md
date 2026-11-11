@@ -68,7 +68,7 @@ Files are rendered in rank order as **paths** (one per line) or **sigs** (path p
 
 On dev (n = 223 with a non-test gold file), the best of the 24 propagation variants reaches MRR 0.677. That is level with plain BM25 (0.676) and below `rrf(bm25, seed)` (0.714). Without fusion, every PPR variant (0.548–0.622) is below the seeds alone (0.649), and more spreading is monotonically worse: mean MRR is 0.611, 0.611 and 0.586 for α = 0.2, 0.5 and 0.8, and the worst α = 0.8 variants fall to 0.548–0.573. Global-PageRank normalization only partly recovers the loss. We therefore select **seed+bm25** and report everything on test.
 
-<!-- VARIANT TEST GRID sentence -->
+For transparency we also ran all 24 variants on test after selection. The picture is the same. Unfused PPR variants score MRR 0.421–0.469, all below seeds alone (0.497). Mean MRR falls from 0.462 to 0.458 to 0.447 as α rises from 0.2 to 0.5 to 0.8. Fused variants score 0.593–0.620, all below seed+bm25 (0.642).
 
 ### 4.2 Rankers on test (no LLM)
 
