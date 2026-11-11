@@ -55,3 +55,12 @@ pylint-dev__pylint-6506                  seed+bm25/paths/2000 in= 2696   7.9s ra
 pylint-dev__pylint-6506                  bm25/paths/2000      in= 2696   7.6s rank=2 map=True
 pydata__xarray-4248                      seed+bm25/sigs/2000  in= 2417   9.5s rank=5 map=True
 pydata__xarray-4248                      seed+bm25/sigs/500   in=  910   4.1s rank=5 map=True
+pydata__xarray-4248                      seed+bm25/sigs/1000  in= 1413   4.4s rank=4 map=True
+pydata__xarray-4248                      seed+bm25/sigs/4000  in= 4413  10.1s rank=4 map=True
+pydata__xarray-4248                      seed+bm25/paths/2000 in= 1172   4.4s rank=3 map=True
+pydata__xarray-4248                      bm25/paths/2000      in= 1172   4.0s rank=3 map=True
+mwaskom__seaborn-3010                    seed+bm25/sigs/2000  in= 3604   8.7s rank=1 map=True
+mwaskom__seaborn-3010                    seed+bm25/sigs/500   in= 2099   5.8s rank=1 map=True
+mwaskom__seaborn-3010                    seed+bm25/sigs/1000  in= 2604   6.5s rank=1 map=True
+mwaskom__seaborn-3010                    seed+bm25/sigs/4000  in= 4802  10.8s rank=1 map=True
+mwaskom__seaborn-3010                    seed+bm25/paths/2000 in= 2052   5.8s rank=1 map=True

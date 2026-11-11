@@ -29,5 +29,7 @@ def load_tasks(split: str | None = None, dataset: str | None = None) -> list[Tas
     dataset = dataset or os.environ.get("SS_DATASET", "princeton-nlp/SWE-bench_Lite")
     split = split or os.environ.get("SS_SPLIT", "test")
     ds = load_dataset(dataset, split=split)
-    return [Task(r["instance_id"], r["repo"], r["base_commit"], r["problem_statement"], gold_files(r["patch"]))
-            for r in ds]
+    tasks = [Task(r["instance_id"], r["repo"], r["base_commit"], r["problem_statement"], gold_files(r["patch"]))
+             for r in ds]
+    limit = int(os.environ.get("SS_LIMIT", "0"))      # quick runs: first N tasks
+    return tasks[:limit] if limit else tasks
