@@ -43,16 +43,16 @@ def rank_tree(issue: str, g: CodeGraph) -> list[str]:
     return sorted(g.files)
 
 
-_BM25_CACHE: dict[tuple[int, str], list[str]] = {}
+_BM25_CACHE: dict = {"g": None, "by_issue": {}}
 
 
 def rank_bm25(issue: str, g: CodeGraph) -> list[str]:
-    key = (id(g), issue)
-    if key not in _BM25_CACHE:
-        if len(_BM25_CACHE) > 8:
-            _BM25_CACHE.clear()
-        _BM25_CACHE[key] = _rank_bm25(issue, g)
-    return list(_BM25_CACHE[key])
+    # cache holds a reference to g itself: id() can be reused after garbage collection
+    if _BM25_CACHE["g"] is not g:
+        _BM25_CACHE["g"], _BM25_CACHE["by_issue"] = g, {}
+    if issue not in _BM25_CACHE["by_issue"]:
+        _BM25_CACHE["by_issue"][issue] = _rank_bm25(issue, g)
+    return list(_BM25_CACHE["by_issue"][issue])
 
 
 def _rank_bm25(issue: str, g: CodeGraph) -> list[str]:
@@ -193,3 +193,74 @@ RANKERS = {
     "ppr": rank_ppr,
     "ppr+bm25": rank_ppr_bm25,
 }
+
+
+# ---------------------------------------------------------------------------
+# Seed & Spread, parametrized. Variants are selected on SWE-bench *dev* (repos
+# disjoint from Lite test) by scripts/tune.py; every variant is reported on test.
+# ---------------------------------------------------------------------------
+_PR_CACHE: dict = {"g": None, "pr": None}
+
+
+def _global_pr(g: CodeGraph) -> dict[str, float]:
+    if _PR_CACHE["g"] is not g:
+        _PR_CACHE["g"], _PR_CACHE["pr"] = g, _pagerank(g, None)
+    return _PR_CACHE["pr"]
+
+
+def ss_scores(issue: str, g: CodeGraph, alpha: float = 0.5, norm: bool = False,
+              agg: str = "file+max") -> dict[str, float]:
+    """File scores from personalized PageRank restarted at issue seeds.
+
+    alpha  probability of following an edge (1 - alpha = restart)
+    norm   divide by global PageRank (smoothed): removes hub bias, keeps what is
+           specifically close to *this* issue rather than central to the repo
+    agg    "file+max": file mass + best symbol;  "max": best symbol only;
+           "sum": file mass + all symbol mass
+    """
+    s = seeds(issue, g)
+    if not s:
+        return {}
+    nodes = g.nodes
+    idx = {n: i for i, n in enumerate(nodes)}
+    v = np.zeros(len(nodes))
+    for n, wt in s.items():
+        v[idx[n]] += wt
+    x = _pagerank(g, v, alpha=alpha)
+    if norm:
+        pr = _global_pr(g)
+        smooth = float(np.median(list(pr.values())))
+        x = {n: val / (pr[n] + smooth) for n, val in x.items()}
+    out = {}
+    for f in g.files:
+        syms = [x.get(sym, 0.0) for sym in g.file_symbols.get(f, [])]
+        own = x.get(f, 0.0)
+        if agg == "max":
+            out[f] = max(syms, default=0.0) + (own if f in s else 0.0)
+        elif agg == "sum":
+            out[f] = own + sum(syms)
+        else:
+            out[f] = own + max(syms, default=0.0)
+    return out
+
+
+def rrf(*rankings: list[str], k: int = 60, weights: list[float] | None = None) -> list[str]:
+    """Reciprocal rank fusion (Cormack et al., 2009)."""
+    weights = weights or [1.0] * len(rankings)
+    score: dict[str, float] = defaultdict(float)
+    for w, r in zip(weights, rankings):
+        for i, f in enumerate(r):
+            score[f] += w / (k + i + 1)
+    return sorted(score, key=lambda f: -score[f])
+
+
+def rank_ss(issue: str, g: CodeGraph, alpha: float = 0.5, norm: bool = False, agg: str = "file+max",
+            fuse: str = "none") -> list[str]:
+    bm = rank_bm25(issue, g)
+    sc = ss_scores(issue, g, alpha, norm, agg)
+    ss = _order(g, sc, bm) if sc else bm
+    if fuse == "rrf":
+        return rrf(bm, ss)
+    if fuse == "rrf3":
+        return rrf(bm, ss, rank_seed(issue, g))
+    return ss

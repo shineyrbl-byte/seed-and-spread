@@ -17,6 +17,8 @@ from seedspread.tasks import load_tasks  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 BUDGETS = [500, 1000, 2000, 4000, 8000]
+import os
+SUFFIX = "_" + os.environ["SS_TAG"] if os.environ.get("SS_TAG") else ""
 
 
 def first_gold_rank(ranked, gold):
@@ -28,7 +30,7 @@ def first_gold_rank(ranked, gold):
 def main():
     only = set(sys.argv[1:]) or set(RANKERS)
     tasks = load_tasks()
-    out = open(ROOT / "results" / "rankers.jsonl", "w")
+    out = open(ROOT / "results" / f"rankers{SUFFIX}.jsonl", "w")
     for i, t in enumerate(tasks):
         g = pickle.load(open(ROOT / "cache" / "graphs" / f"{t.instance_id}.pkl", "rb"))
         row = dict(id=t.instance_id, repo=t.repo, n_files=len(g.files), gold=t.gold_files, rank={}, in_map={})
@@ -48,7 +50,7 @@ def main():
 
 
 def summarize():
-    rows = [json.loads(l) for l in open(ROOT / "results" / "rankers.jsonl")]
+    rows = [json.loads(l) for l in open(ROOT / "results" / f"rankers{SUFFIX}.jsonl")]
     n = len(rows)
     summ = {"n": n, "rankers": {}}
     for name in rows[0]["rank"]:
@@ -58,7 +60,7 @@ def summarize():
         cov = {key.split("/", 1)[1]: sum(r["in_map"][key] for r in rows) / n
                for key in rows[0]["in_map"] if key.startswith(name + "/")}
         summ["rankers"][name] = {**acc, "mrr": mrr, "gold_in_map": cov}
-    json.dump(summ, open(ROOT / "results" / "rankers_summary.json", "w"), indent=1)
+    json.dump(summ, open(ROOT / "results" / f"rankers{SUFFIX}_summary.json", "w"), indent=1)
     for name, s in summ["rankers"].items():
         print(f"{name:10s} acc@1 {s['acc@1']:.3f} acc@5 {s['acc@5']:.3f} acc@10 {s['acc@10']:.3f} mrr {s['mrr']:.3f}")
 

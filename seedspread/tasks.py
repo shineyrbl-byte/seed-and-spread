@@ -21,8 +21,13 @@ def gold_files(patch: str) -> list[str]:
     return sorted({b for _a, b in DIFF_FILE.findall(patch)})
 
 
-def load_tasks(split: str = "test") -> list[Task]:
+def load_tasks(split: str | None = None, dataset: str | None = None) -> list[Task]:
+    """Default: SWE-bench Lite test. Override with SS_DATASET / SS_SPLIT env vars
+    (we tune on princeton-nlp/SWE-bench dev, whose repos are disjoint from Lite test)."""
+    import os
     from datasets import load_dataset
-    ds = load_dataset("princeton-nlp/SWE-bench_Lite", split=split)
+    dataset = dataset or os.environ.get("SS_DATASET", "princeton-nlp/SWE-bench_Lite")
+    split = split or os.environ.get("SS_SPLIT", "test")
+    ds = load_dataset(dataset, split=split)
     return [Task(r["instance_id"], r["repo"], r["base_commit"], r["problem_statement"], gold_files(r["patch"]))
             for r in ds]
