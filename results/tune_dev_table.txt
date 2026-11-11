@@ -1,0 +1,30 @@
+n=223
+rrf(bm25,seed)                                acc@1 0.605 acc@5 0.843 mrr 0.714
+ss[a=0.5,norm=0,agg=file+max,fuse=rrf]        acc@1 0.574 acc@5 0.807 mrr 0.677
+bm25                                          acc@1 0.565 acc@5 0.807 mrr 0.676
+ss[a=0.2,norm=0,agg=max,fuse=rrf]             acc@1 0.565 acc@5 0.830 mrr 0.675
+ss[a=0.2,norm=0,agg=file+max,fuse=rrf]        acc@1 0.565 acc@5 0.816 mrr 0.675
+ss[a=0.5,norm=0,agg=max,fuse=rrf]             acc@1 0.556 acc@5 0.830 mrr 0.669
+ss[a=0.2,norm=1,agg=file+max,fuse=rrf]        acc@1 0.538 acc@5 0.821 mrr 0.659
+ss[a=0.2,norm=1,agg=max,fuse=rrf]             acc@1 0.534 acc@5 0.830 mrr 0.658
+ss[a=0.5,norm=1,agg=max,fuse=rrf]             acc@1 0.534 acc@5 0.825 mrr 0.657
+ss[a=0.8,norm=1,agg=max,fuse=rrf]             acc@1 0.534 acc@5 0.821 mrr 0.656
+ss[a=0.5,norm=1,agg=file+max,fuse=rrf]        acc@1 0.534 acc@5 0.821 mrr 0.655
+ss[a=0.8,norm=0,agg=max,fuse=rrf]             acc@1 0.529 acc@5 0.812 mrr 0.652
+ss[a=0.8,norm=0,agg=file+max,fuse=rrf]        acc@1 0.520 acc@5 0.807 mrr 0.650
+seed                                          acc@1 0.511 acc@5 0.825 mrr 0.649
+ss[a=0.8,norm=1,agg=file+max,fuse=rrf]        acc@1 0.525 acc@5 0.812 mrr 0.646
+ss[a=0.8,norm=1,agg=max,fuse=none]            acc@1 0.511 acc@5 0.776 mrr 0.622
+ss[a=0.5,norm=1,agg=max,fuse=none]            acc@1 0.502 acc@5 0.776 mrr 0.614
+ss[a=0.2,norm=0,agg=file+max,fuse=none]       acc@1 0.493 acc@5 0.767 mrr 0.613
+ss[a=0.2,norm=0,agg=max,fuse=none]            acc@1 0.493 acc@5 0.758 mrr 0.612
+ss[a=0.2,norm=1,agg=max,fuse=none]            acc@1 0.498 acc@5 0.776 mrr 0.611
+ss[a=0.5,norm=0,agg=max,fuse=none]            acc@1 0.489 acc@5 0.762 mrr 0.610
+ss[a=0.5,norm=0,agg=file+max,fuse=none]       acc@1 0.489 acc@5 0.762 mrr 0.610
+ss[a=0.5,norm=1,agg=file+max,fuse=none]       acc@1 0.498 acc@5 0.776 mrr 0.609
+ss[a=0.2,norm=1,agg=file+max,fuse=none]       acc@1 0.493 acc@5 0.776 mrr 0.608
+ss[a=0.8,norm=1,agg=file+max,fuse=none]       acc@1 0.484 acc@5 0.767 mrr 0.602
+ss[a=0.8,norm=0,agg=max,fuse=none]            acc@1 0.435 acc@5 0.753 mrr 0.573
+ss[a=0.8,norm=0,agg=file+max,fuse=none]       acc@1 0.395 acc@5 0.735 mrr 0.548
+
+[exited with code 0]

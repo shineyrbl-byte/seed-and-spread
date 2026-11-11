@@ -264,3 +264,11 @@ def rank_ss(issue: str, g: CodeGraph, alpha: float = 0.5, norm: bool = False, ag
     if fuse == "rrf3":
         return rrf(bm, ss, rank_seed(issue, g))
     return ss
+
+
+def rank_seedfuse(issue: str, g: CodeGraph) -> list[str]:
+    """Selected on SWE-bench dev: RRF of lexical retrieval and IDF-weighted symbol seeds (no walk)."""
+    return rrf(rank_bm25(issue, g), rank_seed(issue, g))
+
+
+RANKERS["seed+bm25"] = rank_seedfuse
