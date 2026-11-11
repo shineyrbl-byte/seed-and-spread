@@ -43,7 +43,19 @@ def rank_tree(issue: str, g: CodeGraph) -> list[str]:
     return sorted(g.files)
 
 
+_BM25_CACHE: dict[tuple[int, str], list[str]] = {}
+
+
 def rank_bm25(issue: str, g: CodeGraph) -> list[str]:
+    key = (id(g), issue)
+    if key not in _BM25_CACHE:
+        if len(_BM25_CACHE) > 8:
+            _BM25_CACHE.clear()
+        _BM25_CACHE[key] = _rank_bm25(issue, g)
+    return list(_BM25_CACHE[key])
+
+
+def _rank_bm25(issue: str, g: CodeGraph) -> list[str]:
     paths = list(g.files)
     docs = [tokenize_code(p.replace("/", " ") + " " + g.files[p]) for p in paths]
     q = [t for t in tokenize_code(issue) if t not in STOP]
