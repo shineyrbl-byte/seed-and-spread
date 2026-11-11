@@ -26,8 +26,9 @@ def render(g: CodeGraph, ranked_files: list[str], budget: int, layout: str = "si
     for f in ranked_files:
         block = [f]
         if layout == "sigs":
-            syms = [g.symbols[s] for s in g.file_symbols.get(f, []) if g.symbols[s].kind != "method"
-                    or symbol_scores.get(s, 0) > 0]
+            syms = [g.symbols[s] for s in g.file_symbols.get(f, [])
+                    if "<locals>" not in g.symbols[s].qualname
+                    and (g.symbols[s].kind != "method" or symbol_scores.get(s, 0) > 0)]
             syms.sort(key=lambda s: (-symbol_scores.get(s.id, 0.0), s.line))
             for s in syms[:max_syms]:
                 indent = "    " if s.kind == "method" else "  "
