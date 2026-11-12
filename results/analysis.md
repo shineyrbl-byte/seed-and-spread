@@ -24,13 +24,13 @@ seed+bm25 vs bm25, MRR: diff +0.034, paired bootstrap p=0.015
 |---|---|---|---|---|---|---|---|---|
 | django/django | 114 | 0.00 | 0.03 | 0.41 | 0.44 | 0.59 | 0.61 | 0.63 |
 | sympy/sympy | 77 | 0.00 | 0.02 | 0.54 | 0.59 | 0.66 | 0.59 | 0.66 |
-| matplotlib/matplotlib | 23 | 0.06 | 0.09 | 0.41 | 0.45 | 0.49 | 0.52 | 0.57 |
 | scikit-learn/scikit-learn | 23 | 0.01 | 0.03 | 0.69 | 0.76 | 0.83 | 0.83 | 0.85 |
+| matplotlib/matplotlib | 23 | 0.06 | 0.09 | 0.41 | 0.45 | 0.49 | 0.52 | 0.57 |
 | pytest-dev/pytest | 17 | 0.03 | 0.11 | 0.22 | 0.24 | 0.35 | 0.48 | 0.52 |
 | sphinx-doc/sphinx | 16 | 0.02 | 0.08 | 0.19 | 0.28 | 0.31 | 0.68 | 0.59 |
+| pylint-dev/pylint | 6 | 0.02 | 0.02 | 0.14 | 0.22 | 0.31 | 0.53 | 0.52 |
 | astropy/astropy | 6 | 0.01 | 0.01 | 0.73 | 0.73 | 0.77 | 0.84 | 0.85 |
 | psf/requests | 6 | 0.12 | 0.06 | 0.65 | 0.69 | 0.69 | 0.67 | 0.67 |
-| pylint-dev/pylint | 6 | 0.02 | 0.02 | 0.14 | 0.22 | 0.31 | 0.53 | 0.52 |
 | pydata/xarray | 5 | 0.02 | 0.29 | 0.49 | 0.52 | 0.40 | 0.43 | 0.57 |
 | mwaskom/seaborn | 4 | 0.05 | 0.32 | 0.52 | 0.52 | 0.52 | 0.54 | 0.53 |
 | pallets/flask | 3 | 0.19 | 0.16 | 0.54 | 0.73 | 0.56 | 0.56 | 0.58 |
@@ -143,12 +143,31 @@ Mean MRR by alpha (fuse=none): a=0.2: 0.462, a=0.5: 0.458, a=0.8: 0.447
 - seed+bm25/sigs/2000 vs seed+bm25/sigs/4000: Acc@1 diff +0.01 (n=100, paired bootstrap p=0.354)
 - seed+bm25/sigs/2000 vs tree/paths/2000: Acc@1 diff +0.28 (n=100, paired bootstrap p=0.000)
 
+Hybrid (model top-1, then ranker order) vs ranker alone vs model alone, same tasks:
+- ppr+bm25/sigs/2000: Acc@1 model 0.63 / ranker 0.50; Acc@5 model 0.79 / ranker 0.81 / hybrid 0.85 (n=100)
+- tree/paths/2000: Acc@1 model 0.37 / ranker 0.00; Acc@5 model 0.49 / ranker 0.01 / hybrid 0.37 (n=100)
+- bm25/sigs/2000: Acc@1 model 0.63 / ranker 0.54; Acc@5 model 0.78 / ranker 0.81 / hybrid 0.85 (n=100)
+- pagerank/sigs/2000: Acc@1 model 0.25 / ranker 0.01; Acc@5 model 0.35 / ranker 0.04 / hybrid 0.27 (n=100)
+- ppr/sigs/2000: Acc@1 model 0.57 / ranker 0.40; Acc@5 model 0.75 / ranker 0.72 / hybrid 0.77 (n=100)
+- seed+bm25/sigs/2000: Acc@1 model 0.65 / ranker 0.63; Acc@5 model 0.81 / ranker 0.86 / hybrid 0.87 (n=100)
+- seed+bm25/sigs/500: Acc@1 model 0.67 / ranker 0.63; Acc@5 model 0.81 / ranker 0.86 / hybrid 0.86 (n=100)
+- seed+bm25/sigs/1000: Acc@1 model 0.63 / ranker 0.63; Acc@5 model 0.80 / ranker 0.86 / hybrid 0.86 (n=100)
+- seed+bm25/sigs/4000: Acc@1 model 0.64 / ranker 0.63; Acc@5 model 0.80 / ranker 0.86 / hybrid 0.86 (n=100)
+- seed+bm25/paths/2000: Acc@1 model 0.56 / ranker 0.63; Acc@5 model 0.77 / ranker 0.86 / hybrid 0.88 (n=100)
+- bm25/paths/2000: Acc@1 model 0.54 / ranker 0.54; Acc@5 model 0.75 / ranker 0.81 / hybrid 0.85 (n=100)
+
 responses with no valid path: 108/1200
 
-## Table 3: gemma-4-e4b-it-4bit file localization (tasks with all conditions: 1)
+## Table 3: gemma-4-e4b-it-4bit file localization (tasks with all conditions: 45)
 
 | condition | n | Acc@1 [95% CI] | Acc@5 | gold in map | Acc@1 given gold in map | ranker top-1 | prompt tokens | sec/task |
 |---|---|---|---|---|---|---|---|---|
-| none/none/0 | 1 | 0.00 [0.00, 0.00] | 0.00 | - | - | - | 210 | 28.4 |
+| none/none/0 | 45 | 0.33 [0.20, 0.47] | 0.47 | - | - | - | 632 | 9.1 |
+| bm25/sigs/2000 | 45 | 0.69 [0.56, 0.82] | 0.89 | 0.96 | 0.72 | 0.51 | 2627 | 21.9 |
+| pagerank/sigs/2000 | 45 | 0.33 [0.20, 0.47] | 0.44 | 0.24 | 0.73 | 0.02 | 2628 | 23.6 |
+| seed+bm25/sigs/2000 | 45 | 0.69 [0.56, 0.82] | 0.89 | 0.93 | 0.74 | 0.60 | 2627 | 31.1 |
+- seed+bm25/sigs/2000 vs none/none/0: Acc@1 diff +0.36 (n=45, paired bootstrap p=0.000)
+- seed+bm25/sigs/2000 vs bm25/sigs/2000: Acc@1 diff +0.00 (n=45, paired bootstrap p=0.615)
+- seed+bm25/sigs/2000 vs pagerank/sigs/2000: Acc@1 diff +0.36 (n=45, paired bootstrap p=0.000)
 
-responses with no valid path: 0/1
+responses with no valid path: 25/181
