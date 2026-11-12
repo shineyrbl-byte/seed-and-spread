@@ -20,9 +20,9 @@ We ask: **given k tokens, which map lets a small on-device model find the file t
 
 ## 2. Related work
 
-**Repository-level localization.** SWE-bench (Jimenez et al., 2024) is the standard benchmark for issue resolution, and SWE-bench Lite its 300-task subset. SWE-agent (Yang et al., 2024) and AutoCodeRover (Zhang et al., 2024) localize interactively. Agentless (Xia et al., 2024) showed a fixed localize-then-repair pipeline is competitive. We isolate its first, file-level step for models small enough to run offline.
+**Repository-level localization.** SWE-bench (Jimenez et al., 2024) is the standard benchmark for issue resolution, and SWE-bench Lite its 300-task subset. SWE-agent (Yang et al., 2024) and AutoCodeRover (Zhang et al., 2024) localize interactively. Agentless (Xia et al., 2025) showed a fixed localize-then-repair pipeline is competitive. We isolate its first, file-level step for models small enough to run offline.
 
-**Code graphs for LLMs.** RepoGraph (Ouyang et al., 2025), CodexGraph (Liu et al., 2024) and LocAgent (Chen et al., 2025) give large models graph-structured access to repositories, typically via multi-step traversal. Aider ranks definitions with PageRank and packs them into a token budget (Gauthier, 2023). We keep budgeted packing, compare global against issue-personalized walks, and target models that cannot afford many tool calls.
+**Code graphs for LLMs.** RepoGraph (Ouyang et al., 2025), CodexGraph (Liu et al., 2025) and LocAgent (Chen et al., 2025) give large models graph-structured access to repositories, typically via multi-step traversal. Aider ranks definitions with PageRank and packs them into a token budget (Gauthier, 2023). We keep budgeted packing, compare global against issue-personalized walks, and target models that cannot afford many tool calls.
 
 **Seeded propagation.** Personalized PageRank (Page et al., 1999; Haveliwala, 2002) biases a random walk toward a restart set. HippoRAG (Gutiérrez et al., 2024) seeds PPR with query entities for multi-hop QA. We test the same idea on code and find it does not transfer to file localization. Reciprocal rank fusion (Cormack et al., 2009) is our fusion operator.
 
@@ -153,15 +153,15 @@ All code, per-task outputs and the scripts that produce every table and figure a
 * Chen, Z. et al. (2025). LocAgent: Graph-Guided LLM Agents for Code Localization. ACL 2025.
 * Cormack, G. V., Clarke, C. L. A., Büttcher, S. (2009). Reciprocal Rank Fusion outperforms Condorcet and individual rank learning methods. SIGIR 2009.
 * Gauthier, P. (2023). Building a better repository map with tree-sitter. aider.chat.
-* Gemma Team, Google DeepMind (2026). Gemma 4 model card.
+* Gemma Team, Google DeepMind (2026). Gemma 4 model card. ai.google.dev/gemma/docs/core/model_card_4.
 * Gutiérrez, B. J. et al. (2024). HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models. NeurIPS 2024.
 * Haveliwala, T. (2002). Topic-sensitive PageRank. WWW 2002.
 * Jimenez, C. E. et al. (2024). SWE-bench: Can Language Models Resolve Real-World GitHub Issues? ICLR 2024.
 * Liu, N. F. et al. (2024). Lost in the Middle: How Language Models Use Long Contexts. TACL.
-* Liu, X. et al. (2024). CodexGraph: Bridging Large Language Models and Code Repositories via Code Graph Databases. arXiv:2408.03910.
+* Liu, X. et al. (2025). CodexGraph: Bridging Large Language Models and Code Repositories via Code Graph Databases. NAACL 2025.
 * Ouyang, S. et al. (2025). RepoGraph: Enhancing AI Software Engineering with Repository-level Code Graph. ICLR 2025.
 * Page, L., Brin, S., Motwani, R., Winograd, T. (1999). The PageRank Citation Ranking: Bringing Order to the Web. Stanford InfoLab.
 * Robertson, S., Zaragoza, H. (2009). The Probabilistic Relevance Framework: BM25 and Beyond. FnTIR.
-* Xia, C. S. et al. (2024). Agentless: Demystifying LLM-based Software Engineering Agents. arXiv:2407.01489.
+* Xia, C. S., Deng, Y., Dunn, S., Zhang, L. (2025). Demystifying LLM-based Software Engineering Agents (Agentless). FSE 2025. arXiv:2407.01489.
 * Yang, J. et al. (2024). SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering. NeurIPS 2024.
 * Zhang, Y. et al. (2024). AutoCodeRover: Autonomous Program Improvement. ISSTA 2024.
