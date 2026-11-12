@@ -1,0 +1,26 @@
+{
+ "seed+bm25/sigs/2000": {
+  "model1": 0.7,
+  "model5": 0.87,
+  "ranker1": 0.63,
+  "ranker5": 0.86,
+  "hybrid5": 0.87,
+  "n": 100
+ },
+ "bm25/sigs/2000": {
+  "model1": 0.64,
+  "model5": 0.89,
+  "ranker1": 0.54,
+  "ranker5": 0.81,
+  "hybrid5": 0.85,
+  "n": 100
+ },
+ "pagerank/sigs/2000": {
+  "model1": 0.33,
+  "model5": 0.42,
+  "ranker1": 0.01,
+  "ranker5": 0.04,
+  "hybrid5": 0.34,
+  "n": 100
+ }
+}

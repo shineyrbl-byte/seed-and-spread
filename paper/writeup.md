@@ -4,7 +4,7 @@
 
 ## Abstract
 
-Offline coding agents cannot read a whole repository, so what they see first decides what they can fix. We study file localization when a small model gets only a *k*-token "repo map" with the issue. We release a standard-library-only toolkit that builds code graphs for all 300 SWE-bench Lite snapshots from git objects, ranks files seven ways, and renders maps to an exact Gemma token budget. We run Gemma 4 E2B and E4B locally on an 8 GB laptop. **(1) Conditioning matters most:** issue-conditioned maps lift Gemma 4 E2B from 15% to 65% top-1 accuracy. A global-PageRank map, as used by popular agents, scores 25%. **(2) Seed, don't spread:** propagating relevance over the code graph with personalized PageRank consistently hurts. Using the graph as a symbol index and fusing it with BM25 is best on a disjoint dev split and lifts test MRR from 0.608 to 0.642 (p = 0.015). **(3) Small budgets suffice:** 500 tokens of signatures match 4,000 at a third of the latency. Once the map is good, the model, not the map, is the bottleneck. Gemma 4 E4B knows more without a map (33% vs 13%) but only matches E2B with one, at 3–4× the latency.
+Offline coding agents cannot read a whole repository, so what they see first decides what they can fix. We study file localization when a small model gets only a *k*-token "repo map" with the issue. We release a standard-library-only toolkit that builds code graphs for all 300 SWE-bench Lite snapshots from git objects, ranks files seven ways, and renders maps to an exact Gemma token budget. We run Gemma 4 E2B and E4B locally on an 8 GB laptop. **(1) Conditioning matters most:** issue-conditioned maps lift Gemma 4 E2B from 15% to 65% top-1 accuracy. A global-PageRank map, as used by popular agents, scores 25%. **(2) Seed, don't spread:** propagating relevance over the code graph with personalized PageRank consistently hurts. Using the graph as a symbol index and fusing it with BM25 is best on a disjoint dev split and lifts test MRR from 0.608 to 0.642 (p = 0.015). **(3) Small budgets suffice:** 500 tokens of signatures match 4,000 at a third of the latency. Once the map is good, the model, not the map, is the bottleneck. Gemma 4 E4B knows more without a map (27% vs 15%), but with a good map it is within noise of E2B (70% vs 65%) at 3.5× the latency.
 
 ## 1. Introduction
 
@@ -62,7 +62,7 @@ Files are rendered in rank order as **paths** (one per line) or **sigs** (path p
 
 **Data.** We report on SWE-bench Lite test (300 tasks, 12 repositories). For selection we use the SWE-bench **dev** split: 225 tasks from 6 repositories absent from test. Every Lite task edits one non-test file, so we report **Acc@k** and **MRR**.
 
-**Models.** Gemma 4 E2B-it and E4B-it, 4-bit MLX (`mlx-community/gemma-4-e{2,4}b-it-4bit`), on an Apple laptop with 8 GB of unified memory, greedy decoding, thinking off. The prompt holds the issue (up to 6,000 characters), the map, and a request for the five most likely files. Paths are matched exactly or by unique suffix. Every condition uses the same fixed, repo-stratified sample of 100 test tasks (E4B: 45, §4.4). Intervals are 95% bootstrap, and comparisons are paired bootstrap tests over tasks.
+**Models.** Gemma 4 E2B-it and E4B-it, 4-bit MLX (`mlx-community/gemma-4-e{2,4}b-it-4bit`), on an Apple laptop with 8 GB of unified memory, greedy decoding, thinking off. The prompt holds the issue (up to 6,000 characters), the map, and a request for the five most likely files. Paths are matched exactly or by unique suffix. Every condition uses the same fixed, repo-stratified sample of 100 test tasks. Intervals are 95% bootstrap, and comparisons are paired bootstrap tests over tasks.
 
 ### 4.1 Selecting a ranker on dev: spreading never helps
 
@@ -122,7 +122,9 @@ Visibility caps what any model can do with a map, and it separates the strategie
 
 **The model re-ranks weak maps but not strong ones.** On the same tasks, Gemma's top-1 beats the top-1 of the ranker that built its map: PPR 0.40→0.57 (p = 0.001), ppr+bm25 0.50→0.63 (p = 0.006), BM25 0.54→0.63 (p = 0.04). With seed+bm25 the gain shrinks to 0.63→0.65 (p = 0.41), and the model's five-file list (Acc@5 0.81) is *worse* than the ranker's own top five (0.86). Whatever the map, model accuracy converges to 0.57–0.67, and to 0.67–0.70 when the gold file is visible. Once the map is good, the 2B model's judgment, not its view, is the bottleneck. An untuned hybrid that puts the model's top-1 first and then follows the ranker recovers the best of both: Acc@5 0.87 for seed+bm25, vs 0.86 for the ranker and 0.81 for the model. Model-level differences among bm25, ppr+bm25 and seed+bm25 are within noise at n = 100 (p ≥ 0.26); the n = 300 ranker comparison (§4.2) is more reliable.
 
-**A bigger model does not replace a good map.** Gemma 4 E4B finished all four conditions on 45 of the 100 tasks before memory pressure on the 8 GB laptop stopped the run, so we report it as partial. On those tasks, E4B more than doubles E2B's no-map accuracy (0.33 vs 0.13, p = 0.002). Once the map is good it gains nothing: BM25 0.69 vs 0.64 (p = 0.13), seed+bm25 0.69 vs 0.69, at 22–31 s per task vs 7–8 s. A global-PageRank map leaves E4B at its no-map 0.33. On a laptop, a good map is worth more than the larger model.
+**A bigger model does not replace a good map.** Gemma 4 E4B nearly doubles E2B's no-map accuracy (0.27 vs 0.15, p = 0.003), but a good map adds far more than model size: seed+bm25 lifts E4B to 0.70, while E4B's gain over E2B with that map is 0.05 (p = 0.12), at 25 s per task vs 7 s. E2B with a seed+bm25 map beats E4B with a PageRank map (0.65 vs 0.33). E4B does separate the rankers: seed+bm25 beats BM25 by 6 points (p = 0.045) and its top-1 beats the ranker's own (0.70 vs 0.63).
+
+![Gemma 4 E4B](fig_llm_e4b.png)
 
 ### 4.5 How many tokens does a small model need?
 
@@ -140,7 +142,7 @@ Very few. Acc@1 is flat across an 8× range of budgets: 0.67, 0.63, 0.65 and 0.6
 
 **Generality.** Nothing here is specific to SWE-bench or Gemma: snapshots come from any git history. The graph needs only definitions and references (tree-sitter would extend it beyond Python). Budgets use the target model's tokenizer. The visibility ceiling is model-free and runs on all 300 tasks in minutes on a CPU, which makes it a cheap first filter for any context-construction method.
 
-**Limitations.** We study file-level localization only, not patch generation or end-to-end resolution. All tasks are Python and single-file. Name resolution is untyped. LLM results use 100 tasks per condition (E4B: 45), so differences under about 10 points are within noise. SWE-bench issues may appear in model pre-training data. This affects all conditions equally, and the no-map baseline (15%) bounds how much the model can recall.
+**Limitations.** We study file-level localization only, not patch generation or end-to-end resolution. All tasks are Python and single-file. Name resolution is untyped. LLM results use 100 tasks per condition, so differences under about 10 points are within noise. SWE-bench issues may appear in model pre-training data. This affects all conditions equally, and the no-map baseline (15%) bounds how much the model can recall.
 
 ## 6. Reproducibility
 

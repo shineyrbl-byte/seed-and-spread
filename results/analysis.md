@@ -28,9 +28,9 @@ seed+bm25 vs bm25, MRR: diff +0.034, paired bootstrap p=0.015
 | matplotlib/matplotlib | 23 | 0.06 | 0.09 | 0.41 | 0.45 | 0.49 | 0.52 | 0.57 |
 | pytest-dev/pytest | 17 | 0.03 | 0.11 | 0.22 | 0.24 | 0.35 | 0.48 | 0.52 |
 | sphinx-doc/sphinx | 16 | 0.02 | 0.08 | 0.19 | 0.28 | 0.31 | 0.68 | 0.59 |
-| pylint-dev/pylint | 6 | 0.02 | 0.02 | 0.14 | 0.22 | 0.31 | 0.53 | 0.52 |
 | astropy/astropy | 6 | 0.01 | 0.01 | 0.73 | 0.73 | 0.77 | 0.84 | 0.85 |
 | psf/requests | 6 | 0.12 | 0.06 | 0.65 | 0.69 | 0.69 | 0.67 | 0.67 |
+| pylint-dev/pylint | 6 | 0.02 | 0.02 | 0.14 | 0.22 | 0.31 | 0.53 | 0.52 |
 | pydata/xarray | 5 | 0.02 | 0.29 | 0.49 | 0.52 | 0.40 | 0.43 | 0.57 |
 | mwaskom/seaborn | 4 | 0.05 | 0.32 | 0.52 | 0.52 | 0.52 | 0.54 | 0.53 |
 | pallets/flask | 3 | 0.19 | 0.16 | 0.54 | 0.73 | 0.56 | 0.56 | 0.58 |
@@ -158,16 +158,21 @@ Hybrid (model top-1, then ranker order) vs ranker alone vs model alone, same tas
 
 responses with no valid path: 108/1200
 
-## Table 3: gemma-4-e4b-it-4bit file localization (tasks with all conditions: 45)
+## Table 3: gemma-4-e4b-it-4bit file localization (tasks with all conditions: 100)
 
 | condition | n | Acc@1 [95% CI] | Acc@5 | gold in map | Acc@1 given gold in map | ranker top-1 | prompt tokens | sec/task |
 |---|---|---|---|---|---|---|---|---|
-| none/none/0 | 45 | 0.33 [0.20, 0.47] | 0.47 | - | - | - | 632 | 9.1 |
-| bm25/sigs/2000 | 45 | 0.69 [0.56, 0.82] | 0.89 | 0.96 | 0.72 | 0.51 | 2627 | 21.9 |
-| pagerank/sigs/2000 | 45 | 0.33 [0.20, 0.47] | 0.44 | 0.24 | 0.73 | 0.02 | 2628 | 23.6 |
-| seed+bm25/sigs/2000 | 45 | 0.69 [0.56, 0.82] | 0.89 | 0.93 | 0.74 | 0.60 | 2627 | 31.1 |
-- seed+bm25/sigs/2000 vs none/none/0: Acc@1 diff +0.36 (n=45, paired bootstrap p=0.000)
-- seed+bm25/sigs/2000 vs bm25/sigs/2000: Acc@1 diff +0.00 (n=45, paired bootstrap p=0.615)
-- seed+bm25/sigs/2000 vs pagerank/sigs/2000: Acc@1 diff +0.36 (n=45, paired bootstrap p=0.000)
+| none/none/0 | 100 | 0.27 [0.19, 0.36] | 0.36 | - | - | - | 566 | 7.6 |
+| bm25/sigs/2000 | 100 | 0.64 [0.54, 0.73] | 0.89 | 0.93 | 0.69 | 0.54 | 2577 | 21.7 |
+| pagerank/sigs/2000 | 100 | 0.33 [0.24, 0.42] | 0.42 | 0.23 | 0.70 | 0.01 | 2577 | 21.3 |
+| seed+bm25/sigs/2000 | 100 | 0.70 [0.61, 0.79] | 0.87 | 0.93 | 0.75 | 0.63 | 2577 | 24.7 |
+- seed+bm25/sigs/2000 vs none/none/0: Acc@1 diff +0.43 (n=100, paired bootstrap p=0.000)
+- seed+bm25/sigs/2000 vs bm25/sigs/2000: Acc@1 diff +0.06 (n=100, paired bootstrap p=0.045)
+- seed+bm25/sigs/2000 vs pagerank/sigs/2000: Acc@1 diff +0.37 (n=100, paired bootstrap p=0.000)
 
-responses with no valid path: 25/181
+Hybrid (model top-1, then ranker order) vs ranker alone vs model alone, same tasks:
+- seed+bm25/sigs/2000: Acc@1 model 0.70 / ranker 0.63; Acc@5 model 0.87 / ranker 0.86 / hybrid 0.87 (n=100)
+- bm25/sigs/2000: Acc@1 model 0.64 / ranker 0.54; Acc@5 model 0.89 / ranker 0.81 / hybrid 0.85 (n=100)
+- pagerank/sigs/2000: Acc@1 model 0.33 / ranker 0.01; Acc@5 model 0.42 / ranker 0.04 / hybrid 0.34 (n=100)
+
+responses with no valid path: 46/400

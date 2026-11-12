@@ -22,7 +22,7 @@ Paper: [`paper/writeup.md`](paper/writeup.md). Every number in it comes from [`r
 | Ranker MRR on SWE-bench Lite test, seed+bm25 vs BM25 (selected on disjoint SWE-bench dev) | 0.642 vs 0.608, p = 0.015 |
 | Personalized-PageRank "spreading" vs not spreading, on dev and test | always worse |
 | 500-token vs 4,000-token map (E2B Acc@1 / latency) | 0.67 / 3.8 s vs 0.64 / 10.6 s |
-| Gemma 4 E4B vs E2B (partial, n = 45) | no map: 0.33 vs 0.13; seed+bm25 map: 0.69 vs 0.69 at 4× the latency |
+| Gemma 4 E4B vs E2B (n = 100) | no map: 0.27 vs 0.15; seed+bm25 map: 0.70 vs 0.65 (n.s.) at 3.5× the latency |
 
 The recipe: condition the map on the issue, use the code graph as a symbol index rather than diffusing relevance over it, show signatures, and spend about 500 tokens.
 
