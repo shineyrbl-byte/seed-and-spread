@@ -185,3 +185,45 @@ matplotlib__matplotlib-23563             none/none/0          in= 1766  15.2s ra
 matplotlib__matplotlib-23563             seed+bm25/sigs/2000  in= 3788  50.5s rank=1 map=True
 matplotlib__matplotlib-23563             bm25/sigs/2000       in= 3793  27.4s rank=1 map=True
 matplotlib__matplotlib-23563             pagerank/sigs/2000   in= 3785  43.0s rank=5 map=False
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files: 100%|██████████| 8/8 [00:00<00:00, 3069.94it/s]
+scikit-learn__scikit-learn-25500         seed+bm25/sigs/2000  in= 3770  33.4s rank=None map=False
+scikit-learn__scikit-learn-25500         bm25/sigs/2000       in= 3765  25.8s rank=None map=False
+scikit-learn__scikit-learn-25500         pagerank/sigs/2000   in= 3773  24.8s rank=None map=False
+pytest-dev__pytest-7168                  none/none/0          in= 2163  26.2s rank=None map=None
+pytest-dev__pytest-7168                  seed+bm25/sigs/2000  in= 4187  47.8s rank=1 map=True
+pytest-dev__pytest-7168                  bm25/sigs/2000       in= 4191  29.1s rank=5 map=True
+pytest-dev__pytest-7168                  pagerank/sigs/2000   in= 4189  29.4s rank=None map=True
+sphinx-doc__sphinx-7686                  none/none/0          in=  518  12.1s rank=None map=None
+sphinx-doc__sphinx-7686                  seed+bm25/sigs/2000  in= 2544  49.9s rank=1 map=True
+sphinx-doc__sphinx-7686                  bm25/sigs/2000       in= 2544  23.1s rank=1 map=True
+sphinx-doc__sphinx-7686                  pagerank/sigs/2000   in= 2543  53.8s rank=None map=False
+django__django-15320                     none/none/0          in=  353  27.5s rank=None map=None
+django__django-15320                     seed+bm25/sigs/2000  in= 2381  42.4s rank=1 map=True
+django__django-15320                     bm25/sigs/2000       in= 2378  56.0s rank=2 map=True
+django__django-15320                     pagerank/sigs/2000   in= 2381  54.6s rank=1 map=True
+sympy__sympy-13043                       none/none/0          in=  182  29.4s rank=None map=None
+sympy__sympy-13043                       seed+bm25/sigs/2000  in= 2210  35.1s rank=1 map=True
+sympy__sympy-13043                       bm25/sigs/2000       in= 2203  14.0s rank=1 map=True
+sympy__sympy-13043                       pagerank/sigs/2000   in= 2208  48.7s rank=None map=False
+matplotlib__matplotlib-24265             none/none/0          in=  412   6.6s rank=None map=None
+matplotlib__matplotlib-24265             seed+bm25/sigs/2000  in= 2433  38.9s rank=2 map=True
+matplotlib__matplotlib-24265             bm25/sigs/2000       in= 2433  21.8s rank=2 map=True
+matplotlib__matplotlib-24265             pagerank/sigs/2000   in= 2433  52.7s rank=None map=False
+scikit-learn__scikit-learn-13241         none/none/0          in=  483   6.2s rank=None map=None
+scikit-learn__scikit-learn-13241         seed+bm25/sigs/2000  in= 2509  27.2s rank=1 map=True
+scikit-learn__scikit-learn-13241         bm25/sigs/2000       in= 2510  14.1s rank=1 map=True
+scikit-learn__scikit-learn-13241         pagerank/sigs/2000   in= 2510  22.4s rank=None map=False
+django__django-11019                     none/none/0          in=  560   6.2s rank=1 map=None
+django__django-11019                     seed+bm25/sigs/2000  in= 2584  19.4s rank=1 map=True
+django__django-11019                     bm25/sigs/2000       in= 2579  16.5s rank=1 map=True
+django__django-11019                     pagerank/sigs/2000   in= 2581  16.1s rank=1 map=False
+sympy__sympy-20590                       none/none/0          in=  284   2.1s rank=None map=None
+sympy__sympy-20590                       seed+bm25/sigs/2000  in= 2305  36.8s rank=None map=False
+sympy__sympy-20590                       bm25/sigs/2000       in= 2311  13.4s rank=None map=False
+sympy__sympy-20590                       pagerank/sigs/2000   in= 2308  22.0s rank=None map=False
+matplotlib__matplotlib-22711             none/none/0          in= 1412  21.5s rank=1 map=None
+matplotlib__matplotlib-22711             seed+bm25/sigs/2000  in= 3433  39.3s rank=1 map=True
+matplotlib__matplotlib-22711             bm25/sigs/2000       in= 3436  21.8s rank=1 map=True
+matplotlib__matplotlib-22711             pagerank/sigs/2000   in= 3440  50.4s rank=1 map=True
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
