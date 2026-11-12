@@ -4,19 +4,19 @@
 
 ## Abstract
 
-Small coding agents that run offline cannot read a whole repository, so what they see first decides what they can fix. We study the first step of issue resolution, finding the file to edit, when a small model gets only a *k*-token "repo map" alongside the issue. We release an open, standard-library-only toolkit. It builds code graphs for all 300 SWE-bench Lite snapshots straight from git objects, ranks files with seven strategies, and renders maps that fit an exact Gemma token budget. We then run Gemma 4 E2B and E4B locally (4-bit, Apple MLX, 8 GB of RAM). Three findings stand out. **(1) What the map is conditioned on matters most.** Issue-conditioned maps lift Gemma 4 E2B from 15% to 63% top-1 file accuracy. A map of the repository's most central code, the global-PageRank construction used by popular agents, scores 25%, barely better than no map. **(2) Use the code graph as an index, not as a diffusion network.** Spreading relevance with personalized PageRank from issue-mentioned symbols consistently *hurts*, and the more it spreads the worse it gets. Using the graph's definition table to weight issue identifiers by rarity, then fusing with BM25, is the best ranker on a held-out dev split and improves test MRR from 0.608 to 0.642 (paired bootstrap p = 0.015). **(3) The small model re-ranks.** Given a well-ranked map, Gemma 4 E2B picks the right file more often than the ranker that built the map. <!-- BUDGET/E4B sentence -->
+Offline coding agents cannot read a whole repository, so what they see first decides what they can fix. We study file localization when a small model gets only a *k*-token "repo map" with the issue. We release a standard-library-only toolkit that builds code graphs for all 300 SWE-bench Lite snapshots from git objects, ranks files seven ways, and renders maps to an exact Gemma token budget. We run Gemma 4 E2B and E4B locally on an 8 GB laptop. **(1) Conditioning matters most:** issue-conditioned maps lift Gemma 4 E2B from 15% to 65% top-1 accuracy. A global-PageRank map, as used by popular agents, scores 25%. **(2) Seed, don't spread:** propagating relevance over the code graph with personalized PageRank consistently hurts. Using the graph as a symbol index and fusing it with BM25 is best on a disjoint dev split and lifts test MRR from 0.608 to 0.642 (p = 0.015). **(3) Small budgets suffice:** 500 tokens of signatures match 4,000 at a third of the latency. Once the map is good, the model, not the map, is the bottleneck. <!-- E4B sentence -->
 
 ## 1. Introduction
 
-A coding agent can only fix what it can find. Before a model edits a line, it has to decide where in a repository of hundreds of files the problem lives. Cloud agents get there with long contexts and many tool calls. A model on a laptop cannot: prefill costs seconds per thousand tokens, and small models are easily distracted by irrelevant context.
+A coding agent can only fix what it can find. Cloud agents locate bugs with long contexts and many tool calls. A model on a laptop cannot: prefill costs seconds per thousand tokens, and small models are easily distracted.
 
 The standard remedy is a *repo map*, a compact listing of files and perhaps signatures placed in the prompt. Agents build these maps in different ways: global PageRank over a reference graph (Aider), lexical retrieval (Agentless-style BM25), or a plain directory tree. With only a few thousand tokens to spend, that choice determines what a small model can see.
 
-We ask: **given k tokens, which map lets a small on-device model localize the file that must change?** We started out expecting graph *propagation*, personalized PageRank seeded by the issue, to win. It did not, and that negative result turned out to be the most useful thing we learned. Our contributions:
+We ask: **given k tokens, which map lets a small on-device model find the file that must change?** We expected issue-seeded graph *propagation* to win. It did not, and that negative result is our most useful finding. Contributions:
 
-1. **A budgeted-localization benchmark and toolkit** (Apache-2.0). It reads 300 historical snapshots directly from bare git clones, builds a file/symbol graph with Python's `ast`, and implements seven rankers and two map layouts with exact Gemma-token budgets. It also reports a *visibility ceiling* (is the gold file in the map at all?) separately from model accuracy.
-2. **A controlled study of graph use.** In a 24-variant grid selected on a disjoint dev split, propagation never beats seeding alone. Our dev-selected ranker, `seed+bm25`, is the best ranker on test.
-3. **On-device measurements** with Gemma 4 E2B and E4B. We measure accuracy, visibility, prompt size and latency across map strategies, layouts and budgets, all on one 8 GB laptop.
+1. **A budgeted-localization benchmark and toolkit** (Apache-2.0): 300 snapshots read from bare git clones, an `ast` file/symbol graph, seven rankers, two layouts, exact Gemma-token budgets, and a model-free *visibility ceiling* (is the gold file in the map at all?).
+2. **A controlled study of graph use:** in a 24-variant grid selected on a disjoint dev split, propagation never beats seeding alone. The dev-selected `seed+bm25` is the best ranker on test.
+3. **On-device measurements** with Gemma 4 E2B and E4B of accuracy, visibility, prompt size and latency across maps, layouts and budgets.
 
 ## 2. Related work
 
@@ -60,15 +60,15 @@ Files are rendered in rank order as **paths** (one per line) or **sigs** (path p
 
 ## 4. Experiments
 
-**Data.** SWE-bench Lite test (300 tasks, 12 repositories) for all reported results. For model selection we use the SWE-bench **dev** split: 225 tasks from 6 repositories that do not appear in the test set (sqlfluff, pvlib, astroid, pydicom, marshmallow, pyvista). All 300 Lite tasks edit exactly one non-test file, so we report **Acc@k** (gold file in the top k) and **MRR**.
+**Data.** We report on SWE-bench Lite test (300 tasks, 12 repositories). For selection we use the SWE-bench **dev** split: 225 tasks from 6 repositories absent from test. Every Lite task edits one non-test file, so we report **Acc@k** and **MRR**.
 
-**Models and hardware.** Gemma 4 E2B-it and E4B-it, 4-bit MLX conversions (`mlx-community/gemma-4-e{2,4}b-it-4bit`), on an Apple laptop with 8 GB of unified memory, greedy decoding, thinking disabled. The prompt contains the issue (truncated to 6,000 characters), the map, and an instruction to list the five most likely files. Predicted paths are matched to repository files exactly or by unique suffix. LLM experiments use a fixed, repo-stratified random sample of 100 test tasks (seed 0), and every condition runs on the same tasks. Confidence intervals are 95% bootstrap (2,000 resamples), and comparisons use paired bootstrap tests over tasks.
+**Models.** Gemma 4 E2B-it and E4B-it, 4-bit MLX (`mlx-community/gemma-4-e{2,4}b-it-4bit`), on an Apple laptop with 8 GB of unified memory, greedy decoding, thinking off. The prompt holds the issue (up to 6,000 characters), the map, and a request for the five most likely files. Paths are matched exactly or by unique suffix. Every condition uses the same fixed, repo-stratified sample of 100 test tasks. Intervals are 95% bootstrap, and comparisons are paired bootstrap tests over tasks.
 
 ### 4.1 Selecting a ranker on dev: spreading never helps
 
-On dev (n = 223 with a non-test gold file), the best of the 24 propagation variants reaches MRR 0.677. That is level with plain BM25 (0.676) and below `rrf(bm25, seed)` (0.714). Without fusion, every PPR variant (0.548–0.622) is below the seeds alone (0.649), and more spreading is monotonically worse: mean MRR is 0.611, 0.611 and 0.586 for α = 0.2, 0.5 and 0.8, and the worst α = 0.8 variants fall to 0.548–0.573. Global-PageRank normalization only partly recovers the loss. We therefore select **seed+bm25** and report everything on test.
+On dev (n = 223 with a non-test gold file), the best of 24 propagation variants reaches MRR 0.677. That ties plain BM25 (0.676) and trails `rrf(bm25, seed)` (0.714). Unfused, every PPR variant (0.548–0.622) is below seeds alone (0.649). Longer walks are worst: mean MRR is 0.611, 0.611 and 0.586 for α = 0.2, 0.5 and 0.8. Global-PageRank normalization does not close the gap. We select **seed+bm25**.
 
-For transparency we also ran all 24 variants on test after selection. The picture is the same. Unfused PPR variants score MRR 0.421–0.469, all below seeds alone (0.497). Mean MRR falls from 0.462 to 0.458 to 0.447 as α rises from 0.2 to 0.5 to 0.8. Fused variants score 0.593–0.620, all below seed+bm25 (0.642).
+After selection we also ran all 24 variants on test, and the picture is unchanged. Unfused PPR scores 0.421–0.469, below seeds alone (0.497), with α = 0.8 again worst. Fused variants score 0.593–0.620, below seed+bm25 (0.642).
 
 ### 4.2 Rankers on test (no LLM)
 
@@ -134,7 +134,11 @@ Very few. Acc@1 is flat across an 8× range of budgets: 0.67, 0.63, 0.65 and 0.6
 
 ## 5. Discussion
 
-<!-- DISCUSSION -->
+**What to build into a small coding agent.** Our results add up to a simple recipe for the localization step of an on-device agent. (i) Condition the context on the issue. Repository-centric summaries (directory trees, centrality-ranked maps) waste most of a small model's budget. (ii) Use the code graph as a *symbol index*: which names are defined where, and how rare they are. Fuse it with lexical retrieval, and do not diffuse relevance over references. (iii) Show signatures, not just paths. (iv) Spend about 500 tokens, not 4,000. On an 8 GB laptop this takes the step from about 11 s to about 4 s with no loss of accuracy.
+
+**Why diffusion fails here, and where it may not.** PPR suits multi-hop QA, where answers lie *between* query entities. In SWE-bench Lite the file to edit usually defines what the issue names, so every hop moves mass from that definition toward core modules (the hub bias of §4.2). We expect propagation to matter more for multi-file changes and for issues that describe symptoms without naming code (sphinx, where all graph rankers trail BM25). SWE-bench Verified and multi-file benchmarks are the natural next test.
+
+**Generality.** Nothing here is specific to SWE-bench or Gemma. Snapshots come from any git history. The graph needs only definitions and references (tree-sitter would extend it beyond Python). Budgets use the target model's tokenizer. The visibility ceiling is model-free and runs on all 300 tasks in minutes on a CPU, which makes it a cheap first filter for any context-construction method.
 
 **Limitations.** We study file-level localization only, not patch generation or end-to-end resolution. All tasks are Python and single-file. Name resolution is untyped. LLM results use 100 tasks per condition, so differences under about 10 points are within noise. We report intervals and avoid such claims. SWE-bench issues may appear in model pre-training data. This affects all conditions equally, and the no-map baseline (15%) bounds how much the model can recall.
 
