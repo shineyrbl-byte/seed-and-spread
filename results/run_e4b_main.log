@@ -111,3 +111,23 @@ matplotlib__matplotlib-24334             none/none/0          in=  257   4.9s ra
 matplotlib__matplotlib-24334             seed+bm25/sigs/2000  in= 2271  54.5s rank=1 map=True
 matplotlib__matplotlib-24334             bm25/sigs/2000       in= 2284  87.3s rank=None map=True
 matplotlib__matplotlib-24334             pagerank/sigs/2000   in= 2280  47.7s rank=None map=False
+scikit-learn__scikit-learn-10949         none/none/0          in=  675   6.4s rank=None map=None
+scikit-learn__scikit-learn-10949         seed+bm25/sigs/2000  in= 2703  81.7s rank=1 map=True
+scikit-learn__scikit-learn-10949         bm25/sigs/2000       in= 2703  60.6s rank=1 map=True
+scikit-learn__scikit-learn-10949         pagerank/sigs/2000   in= 2702  39.3s rank=1 map=True
+pytest-dev__pytest-8365                  none/none/0          in=  624   8.5s rank=None map=None
+pytest-dev__pytest-8365                  seed+bm25/sigs/2000  in= 2645  40.9s rank=1 map=True
+pytest-dev__pytest-8365                  bm25/sigs/2000       in= 2646  20.1s rank=1 map=True
+pytest-dev__pytest-8365                  pagerank/sigs/2000   in= 2646  41.6s rank=None map=False
+sphinx-doc__sphinx-8273                  none/none/0          in=  315   4.2s rank=None map=None
+sphinx-doc__sphinx-8273                  seed+bm25/sigs/2000  in= 2340  15.9s rank=1 map=True
+sphinx-doc__sphinx-8273                  bm25/sigs/2000       in= 2336  15.5s rank=1 map=True
+sphinx-doc__sphinx-8273                  pagerank/sigs/2000   in= 2343  16.0s rank=None map=False
+django__django-13230                     none/none/0          in=  142   1.8s rank=1 map=None
+django__django-13230                     seed+bm25/sigs/2000  in= 2164  15.3s rank=1 map=True
+django__django-13230                     bm25/sigs/2000       in= 2170  12.7s rank=1 map=True
+django__django-13230                     pagerank/sigs/2000   in= 2170  15.9s rank=None map=False
+sympy__sympy-20049                       none/none/0          in=  682  23.8s rank=1 map=None
+sympy__sympy-20049                       seed+bm25/sigs/2000  in= 2708  35.7s rank=1 map=True
+sympy__sympy-20049                       bm25/sigs/2000       in= 2706  18.5s rank=1 map=True
+  warnings.warn('resource_tracker: There appear to be %d '
